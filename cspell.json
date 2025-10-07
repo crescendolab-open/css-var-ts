@@ -1,0 +1,41 @@
+{
+  "allowCompoundWords": true,
+  "enableFiletypes": ["*"],
+  "enableGlobDot": true,
+  "files": ["**/*"],
+  "ignorePaths": [
+    "**/*.svg",
+    "**/.env.*.local",
+    "**/.env.local",
+    "**/.gitignore",
+    "**/__snapshots__/**",
+    "**/CHANGELOG.md",
+    "**/LICENSE",
+    "/*.code-workspace",
+    "/.changeset",
+    "/.git",
+    "/.prettierignore",
+    "/.stylelintignore",
+    "/pnpm-lock.yaml"
+  ],
+  "includeRegExpList": ["[ -~]"],
+  "useGitignore": true,
+  "version": "0.2",
+  "words": [
+    "antfu",
+    "commitizen",
+    "esbuild",
+    "jiti",
+    "jsdoc",
+    "nums",
+    "nvmrc",
+    "pathe",
+    "tsdoc",
+    "tsdown",
+    "unbundle",
+    "unrs",
+    "vite",
+    "vitejs",
+    "vitest"
+  ]
+}

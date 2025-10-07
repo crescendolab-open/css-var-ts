@@ -1,0 +1,5 @@
+/pnpm-lock.yaml
+dist
+/.changeset
+CHANGELOG.md
+LICENSE
