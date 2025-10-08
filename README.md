@@ -2,8 +2,7 @@
 
 Type-safe, ergonomic utilities for authoring, registering, and consuming CSS Custom Properties (CSS Variables) in TypeScript.
 
-[![npm (scoped)](https://img.shields.io/npm/v/@crescendolab/css-var-ts?color=blue&label=npm)](https://www.npmjs.com/package/@crescendolab/css-var-ts)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/crescendolab-open/css-var-ts/ci.yml?branch=main&label=ci&logo=github&color=blue)](https://github.com/crescendolab-open/css-var-ts/actions)
+[![npm (scoped)](https://img.shields.io/npm/v/@crescendolab/css-var-ts)](https://www.npmjs.com/package/@crescendolab/css-var-ts)
 
 ---
 
