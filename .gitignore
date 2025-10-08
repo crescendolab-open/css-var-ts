@@ -141,5 +141,10 @@ dist
 
 !.env
 !.env.*
-.env.local
-.env.*.local
+*.local
+*.local.*
+
+/packages/css-var-ts/README.md
+/packages/css-var-ts/LICENSE
+*storybook.log
+storybook-static

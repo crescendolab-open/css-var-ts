@@ -3,9 +3,10 @@
   "references": [
     { "path": "./tsconfig.node.json" },
     { "path": "./packages/utils/tsconfig.app.json" },
-    { "path": "./packages/template-vite-react-19/tsconfig.node.json" },
-    { "path": "./packages/template-vite-react-19/tsconfig.app.json" },
-    { "path": "./packages/template-ts-lib/tsconfig.lib.json" },
-    { "path": "./packages/template-ts-lib/tsconfig.node.json" }
+    { "path": "./packages/examples/tsconfig.node.json" },
+    { "path": "./packages/examples/tsconfig.app.json" },
+    { "path": "./packages/examples/tsconfig.emotion.json" },
+    { "path": "./packages/css-var-ts/tsconfig.lib.json" },
+    { "path": "./packages/css-var-ts/tsconfig.node.json" }
   ]
 }

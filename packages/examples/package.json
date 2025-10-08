@@ -1,0 +1,31 @@
+{
+  "name": "@repo/examples",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example projects demonstrating the usage of css-var-ts",
+  "type": "module",
+  "scripts": {
+    "build-storybook": "storybook build",
+    "storybook": "storybook dev -p 6006"
+  },
+  "dependencies": {
+    "@crescendolab/css-var-ts": "workspace:*",
+    "@emotion/css": "catalog:",
+    "@emotion/react": "catalog:",
+    "@emotion/styled": "catalog:",
+    "@mui/system": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@emotion/babel-preset-css-prop": "catalog:",
+    "@storybook/react-vite": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "globals": "catalog:",
+    "storybook": "catalog:",
+    "vite": "catalog:"
+  }
+}

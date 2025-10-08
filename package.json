@@ -8,7 +8,7 @@
     "changeset": "changeset",
     "checkTypes": "tsc -b --noEmit",
     "commit": "cz",
-    "dev": "pnpm run --filter template-vite-react-19 dev",
+    "dev": "pnpm run --filter docs dev",
     "lint": "run-p lint:*",
     "lint:cspell": "cspell --no-summary --no-progress",
     "lint:es": "eslint . --fix --report-unused-disable-directives --max-warnings 0",
@@ -26,6 +26,7 @@
     "@types/fs-extra": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
     "fs-extra": "catalog:",
+    "package-directory": "catalog:",
     "vite": "catalog:"
   },
   "devDependencies": {
@@ -68,7 +69,7 @@
     "typescript": "catalog:",
     "vitest": "catalog:"
   },
-  "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef",
+  "packageManager": "pnpm@10.18.1+sha512.77a884a165cbba2d8d1c19e3b4880eee6d2fcabd0d879121e282196b80042351d5eb3ca0935fa599da1dc51265cc68816ad2bddd2a2de5ea9fdf92adbec7cd34",
   "engines": {
     "node": ">=18",
     "pnpm": ">=8"

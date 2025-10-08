@@ -1,0 +1,47 @@
+{
+  "name": "@crescendolab/css-var-ts",
+  "version": "0.1.0",
+  "description": "Type-safe utilities for CSS Custom Properties",
+  "keywords": [
+    "css",
+    "css-variables",
+    "css-custom-properties",
+    "typescript",
+    "type-safe",
+    "design-system",
+    "tokens",
+    "emotion",
+    "styled-components",
+    "mui",
+    "react",
+    "emotion-css",
+    "css-in-js"
+  ],
+  "homepage": "https://github.com/crescendolab-open/css-var-ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crescendolab-open/css-var-ts.git"
+  },
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "prepublishOnly": "pnpm run build"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:"
+  },
+  "optionalDependencies": {
+    "@types/randombytes": "catalog:",
+    "randombytes": "catalog:",
+    "slugify": "catalog:"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

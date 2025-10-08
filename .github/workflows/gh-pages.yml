@@ -30,11 +30,11 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
-      - run: pnpm run --filter template-vite-react-19 build --outDir ../../dist --base=/${{ github.event.repository.name }}/
+      - run: pnpm -F examples build-storybook --base=/${{ github.event.repository.name }}/
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: dist
+          folder: packages/examples/storybook-static
           clean: true
           token: ${{ secrets.GITHUB_TOKEN }}

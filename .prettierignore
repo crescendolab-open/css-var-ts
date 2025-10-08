@@ -3,3 +3,8 @@ dist
 /.changeset
 CHANGELOG.md
 LICENSE
+
+/packages/css-var-ts/README.md
+/packages/css-var-ts/LICENSE
+
+storybook-static
