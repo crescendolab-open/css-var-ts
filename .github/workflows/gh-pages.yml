@@ -30,7 +30,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm install
-      - run: pnpm -F examples build-storybook --base=/${{ github.event.repository.name }}/
+      - run: pnpm -F examples build-storybook
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
