@@ -4,8 +4,8 @@ import { Box } from "@mui/system";
 import * as React from "react";
 import {
   gruvboxCssVarBaseDefinition,
-  gruvboxCssVarDarkDefinition,
-  gruvboxCssVarLightDefinition,
+  gruvboxCssVarSemanticDefinition,
+  gruvboxDarkCssProps,
 } from "../../styles";
 
 const sxPropsRecord = {
@@ -20,9 +20,9 @@ const sxPropsRecord = {
   demoSingle: {
     label: "demoSingle",
     ...gruvboxCssVarBaseDefinition.cssProps,
-    ...gruvboxCssVarLightDefinition.cssProps,
+    ...gruvboxCssVarSemanticDefinition.cssProps,
     "&.dark": {
-      ...gruvboxCssVarDarkDefinition.cssProps,
+      ...gruvboxDarkCssProps,
     },
     display: "flex",
     flexDirection: "row",
@@ -33,8 +33,8 @@ const sxPropsRecord = {
   },
   button: {
     label: "button",
-    color: gruvboxCssVarDarkDefinition.getValue("fg"),
-    backgroundColor: gruvboxCssVarDarkDefinition.getValue("bg"),
+    color: gruvboxCssVarSemanticDefinition.getValue("fg"),
+    backgroundColor: gruvboxCssVarSemanticDefinition.getValue("bg"),
     border: `1px solid currentColor`,
     borderRadius: "4px",
     padding: "8px 16px",
@@ -42,10 +42,10 @@ const sxPropsRecord = {
     "&:not(:disabled)": {
       cursor: "pointer",
       "&.warning": {
-        color: gruvboxCssVarDarkDefinition.getValue("warning"),
+        color: gruvboxCssVarSemanticDefinition.getValue("warning"),
       },
       "&.error": {
-        color: gruvboxCssVarDarkDefinition.getValue("error"),
+        color: gruvboxCssVarSemanticDefinition.getValue("error"),
       },
       transition: "all 0.1s ease-in-out",
       "&:hover": {

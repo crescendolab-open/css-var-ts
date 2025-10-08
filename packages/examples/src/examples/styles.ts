@@ -4,6 +4,8 @@ import {
   slugify,
 } from "@crescendolab/css-var-ts";
 
+import { mapKeys } from "es-toolkit";
+
 const gruvboxCssVarUtils = createCssVarUtils({
   recordKeyToCssVarKey: (recordKey) =>
     `--gruvbox-${slugify(recordKey)}-${randomString(8)}` as const,
@@ -79,28 +81,32 @@ const gruvboxCssVarBaseDefinition = gruvboxCssVarUtils.define({
   gruvboxLightFg4: "#7c6f64",
 });
 
-const gruvboxCssVarDarkDefinition = gruvboxCssVarUtils.define({
-  fg: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkFg"),
-  bg: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkBg"),
-  error: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkRed"),
-  warning: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkYellow"),
-  primary: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkBlue"),
-});
-
-const gruvboxCssVarLightDefinition = gruvboxCssVarUtils.define({
+const gruvboxCssVarSemanticDefinition = gruvboxCssVarUtils.define({
   fg: gruvboxCssVarBaseDefinition.getValue("gruvboxLightFg"),
   bg: gruvboxCssVarBaseDefinition.getValue("gruvboxLightBg"),
   error: gruvboxCssVarBaseDefinition.getValue("gruvboxLightRed"),
   warning: gruvboxCssVarBaseDefinition.getValue("gruvboxLightYellow"),
   primary: gruvboxCssVarBaseDefinition.getValue("gruvboxLightBlue"),
-} satisfies Record<
-  keyof typeof gruvboxCssVarDarkDefinition.cssVarRecord,
-  string
->);
+});
+
+const gruvboxDarkCssProps: typeof gruvboxCssVarSemanticDefinition.cssProps =
+  mapKeys(
+    {
+      fg: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkFg"),
+      bg: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkBg"),
+      error: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkRed"),
+      warning: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkYellow"),
+      primary: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkBlue"),
+    } satisfies Record<
+      keyof typeof gruvboxCssVarSemanticDefinition.cssVarRecord,
+      string
+    >,
+    (_value, key) => gruvboxCssVarSemanticDefinition.getKey(key),
+  );
 
 export {
   gruvboxCssVarBaseDefinition,
-  gruvboxCssVarDarkDefinition,
-  gruvboxCssVarLightDefinition,
+  gruvboxCssVarSemanticDefinition,
   gruvboxCssVarUtils,
+  gruvboxDarkCssProps,
 };
