@@ -1,5 +1,11 @@
 # @crescendolab/css-var-ts
 
+## 0.1.3
+
+### Patch Changes
+
+- 291eae8: docs: custom variable key strategy
+
 ## 0.1.2
 
 ### Patch Changes
