@@ -37,7 +37,7 @@ yarn add @crescendolab/css-var-ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
 // 1. Define a base palette
-const palette = cssVarUtils.define({
+const paletteDefinition = cssVarUtils.define({
   primaryBlue: "#0074D9",
   accentPink: "#F012BE",
   neutralBg: "#FFFFFF",
@@ -45,18 +45,18 @@ const palette = cssVarUtils.define({
 });
 
 // 2. Define semantic tokens referencing the palette (type‑safe)
-const semantic = cssVarUtils.define({
-  brand: palette.getValue("primaryBlue"),
-  text: palette.getValue("neutralFg"),
-  background: palette.getValue("neutralBg"),
+const semanticDefinition = cssVarUtils.define({
+  brand: paletteDefinition.getValue("primaryBlue"),
+  text: paletteDefinition.getValue("neutralFg"),
+  background: paletteDefinition.getValue("neutralBg"),
 });
 
 // 3. Use in styles
 const style: React.CSSProperties = {
-  ...palette.cssProps,
-  ...semantic.cssProps,
-  color: semantic.getValue("text"),
-  backgroundColor: semantic.getValue("background"),
+  ...paletteDefinition.cssProps,
+  ...semanticDefinition.cssProps,
+  color: semanticDefinition.getValue("text"),
+  backgroundColor: semanticDefinition.getValue("background"),
 };
 ```
 
@@ -67,21 +67,21 @@ Resulting (example) generated variable keys (random 8‑char suffix) look like:
 --accentpink-9fe012ab
 ```
 
----
-
 ## 🧩 Basic Usage (from Storybook “01_basic”)
 
 ```ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
+// Base palette
 const paletteDefinition = cssVarUtils.define({
   navy: "#001F3F",
   blue: "#0074D9",
   aqua: "#7FDBFF",
-  // ...
+  black: "#111111",
 });
 
-const semantic = cssVarUtils.define({
+// Semantic tokens referencing base palette
+const semanticDefinition = cssVarUtils.define({
   primary: paletteDefinition.getValue("navy"),
   foreground: paletteDefinition.getValue("black"),
 });
@@ -89,13 +89,11 @@ const semantic = cssVarUtils.define({
 // Override one semantic var dynamically
 const dynamicStyle = {
   ...paletteDefinition.cssProps,
-  ...semantic.cssProps,
-  [semantic.getKey("primary")]: paletteDefinition.getValue("blue"),
-  color: semantic.getValue("foreground"),
+  ...semanticDefinition.cssProps,
+  [semanticDefinition.getKey("primary")]: paletteDefinition.getValue("blue"),
+  color: semanticDefinition.getValue("foreground"),
 };
 ```
-
-Why the two steps? You keep a raw color inventory (can later switch based on theme) and build semantic tokens referencing it. Both sets remain type‑safe.
 
 ---
 
@@ -150,18 +148,42 @@ const button = css({
 Use `createCssVarUtils` to fully control how variable names are produced (e.g. ephemeral / randomized keys).
 
 ```ts
-import { createCssVarUtils } from "@crescendolab/css-var-ts";
+import {
+  createCssVarUtils,
+  randomString,
+  slugify,
+} from "@crescendolab/css-var-ts";
 
-const randomCssVarUtils = createCssVarUtils({
-  recordKeyToCssVarKey: () =>
-    `--random-${Math.random().toString(16).slice(2)}` as const,
+const myCssVarUtils = createCssVarUtils({
+  recordKeyToCssVarKey: (key) =>
+    `--my-${slugify(key)}-${randomString(8)}` as const,
 });
 
-const randomVars = randomCssVarUtils.define({
+const myDefinition = myCssVarUtils.define({
   primary: "#0074D9",
 });
 
-randomVars.getKey("primary"); // different each load
+myDefinition.getKey("primary"); // different each load
+```
+
+#### Static (Deterministic) Keys
+
+If you prefer fully readable, deterministic variable names (no random suffix) you can supply a static strategy. Be sure to manually ensure uniqueness across packages / bundles when using this approach.
+
+```ts
+import { createCssVarUtils, slugify } from "@crescendolab/css-var-ts";
+
+const staticCssVarUtils = createCssVarUtils({
+  recordKeyToCssVarKey: (key) => `--static-${slugify(key)}` as const,
+});
+
+const staticDefinition = staticCssVarUtils.define({
+  primary: "#0074D9",
+  accent: "#F012BE",
+});
+
+staticDefinition.getKey("primary"); // "--static-primary"
+staticDefinition.getValue("primary"); // "var(--static-primary)"
 ```
 
 ### `@property` Registration
@@ -185,21 +207,24 @@ CSS.registerProperty({
 
 For large-scale web applications (mono-repos, micro frontends, dynamic plugin architectures) you should take extra precautions to avoid accidental variable name collisions and to harden your design system surface.
 
-1. Strengthen uniqueness: Provide a custom `recordKeyToCssVarKey` that injects a namespace (package name) plus a stable build hash or random suffix.
+1. Strengthen uniqueness: Provide a custom `recordKeyToCssVarKey` that injects a namespace (package name) plus a short random suffix. (You can optionally add build / commit info if desired.)
 
    ```ts
-   import { createCssVarUtils } from "@crescendolab/css-var-ts";
+   import {
+     createCssVarUtils,
+     randomString,
+     slugify,
+   } from "@crescendolab/css-var-ts";
 
-   const ns = process.env.APP_NAMESPACE ?? "app"; // e.g. marketing, analytics
-   const buildId = process.env.COMMIT_SHA?.slice(0, 7) ?? "dev";
+   const namespace = process.env.APP_NAMESPACE ?? "app"; // e.g. marketing, analytics
 
    const scopedCssVarUtils = createCssVarUtils({
-     recordKeyToCssVarKey: (k) =>
-       `--${ns}-${buildId}-${k}-${Math.random().toString(36).slice(2, 8)}` as const,
+     recordKeyToCssVarKey: (key) =>
+       `--${namespace}-${slugify(key)}-${randomString(8)}` as const,
    });
    ```
 
-   For deterministic builds replace `Math.random()` with a hash of `(ns + buildId + k)`.
+   For deterministic builds replace `randomString(8)` with a stable hash (e.g. of `namespace + key`).
 
 2. Strongly recommended: Register core design tokens via `@property` to enforce syntax (e.g. `<color>`, `<length>`) and enable smoother transitions & validation.
 3. Expose only semantic tokens to feature teams; keep raw palette tokens private to your design system package.
