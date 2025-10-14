@@ -37,7 +37,7 @@ yarn add @crescendolab/css-var-ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
 // 1. Define a base palette
-const palette = cssVarUtils.define({
+const paletteDefinition = cssVarUtils.define({
   primaryBlue: "#0074D9",
   accentPink: "#F012BE",
   neutralBg: "#FFFFFF",
@@ -45,18 +45,18 @@ const palette = cssVarUtils.define({
 });
 
 // 2. Define semantic tokens referencing the palette (type‑safe)
-const semantic = cssVarUtils.define({
-  brand: palette.getValue("primaryBlue"),
-  text: palette.getValue("neutralFg"),
-  background: palette.getValue("neutralBg"),
+const semanticDefinition = cssVarUtils.define({
+  brand: paletteDefinition.getValue("primaryBlue"),
+  text: paletteDefinition.getValue("neutralFg"),
+  background: paletteDefinition.getValue("neutralBg"),
 });
 
 // 3. Use in styles
 const style: React.CSSProperties = {
-  ...palette.cssProps,
-  ...semantic.cssProps,
-  color: semantic.getValue("text"),
-  backgroundColor: semantic.getValue("background"),
+  ...paletteDefinition.cssProps,
+  ...semanticDefinition.cssProps,
+  color: semanticDefinition.getValue("text"),
+  backgroundColor: semanticDefinition.getValue("background"),
 };
 ```
 
@@ -67,21 +67,21 @@ Resulting (example) generated variable keys (random 8‑char suffix) look like:
 --accentpink-9fe012ab
 ```
 
----
-
 ## 🧩 Basic Usage (from Storybook “01_basic”)
 
 ```ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
+// Base palette
 const paletteDefinition = cssVarUtils.define({
   navy: "#001F3F",
   blue: "#0074D9",
   aqua: "#7FDBFF",
-  // ...
+  black: "#111111",
 });
 
-const semantic = cssVarUtils.define({
+// Semantic tokens referencing base palette
+const semanticDefinition = cssVarUtils.define({
   primary: paletteDefinition.getValue("navy"),
   foreground: paletteDefinition.getValue("black"),
 });
@@ -89,13 +89,11 @@ const semantic = cssVarUtils.define({
 // Override one semantic var dynamically
 const dynamicStyle = {
   ...paletteDefinition.cssProps,
-  ...semantic.cssProps,
-  [semantic.getKey("primary")]: paletteDefinition.getValue("blue"),
-  color: semantic.getValue("foreground"),
+  ...semanticDefinition.cssProps,
+  [semanticDefinition.getKey("primary")]: paletteDefinition.getValue("blue"),
+  color: semanticDefinition.getValue("foreground"),
 };
 ```
-
-Why the two steps? You keep a raw color inventory (can later switch based on theme) and build semantic tokens referencing it. Both sets remain type‑safe.
 
 ---
 
@@ -150,18 +148,22 @@ const button = css({
 Use `createCssVarUtils` to fully control how variable names are produced (e.g. ephemeral / randomized keys).
 
 ```ts
-import { createCssVarUtils, slugify } from "@crescendolab/css-var-ts";
+import {
+  createCssVarUtils,
+  randomString,
+  slugify,
+} from "@crescendolab/css-var-ts";
 
-const randomCssVarUtils = createCssVarUtils({
+const myCssVarUtils = createCssVarUtils({
   recordKeyToCssVarKey: (key) =>
-    `--random-${slugify(key)}-${Math.random().toString(16).slice(2)}` as const,
+    `--my-${slugify(key)}-${randomString(8)}` as const,
 });
 
-const randomVars = randomCssVarUtils.define({
+const myDefinition = myCssVarUtils.define({
   primary: "#0074D9",
 });
 
-randomVars.getKey("primary"); // different each load
+myDefinition.getKey("primary"); // different each load
 ```
 
 #### Static (Deterministic) Keys
@@ -175,13 +177,13 @@ const staticCssVarUtils = createCssVarUtils({
   recordKeyToCssVarKey: (key) => `--static-${slugify(key)}` as const,
 });
 
-const staticVars = staticCssVarUtils.define({
+const staticDefinition = staticCssVarUtils.define({
   primary: "#0074D9",
   accent: "#F012BE",
 });
 
-staticVars.getKey("primary"); // "--static-primary"
-staticVars.getValue("primary"); // "var(--static-primary)"
+staticDefinition.getKey("primary"); // "--static-primary"
+staticDefinition.getValue("primary"); // "var(--static-primary)"
 ```
 
 ### `@property` Registration
