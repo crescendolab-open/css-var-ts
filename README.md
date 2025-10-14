@@ -150,11 +150,11 @@ const button = css({
 Use `createCssVarUtils` to fully control how variable names are produced (e.g. ephemeral / randomized keys).
 
 ```ts
-import { createCssVarUtils } from "@crescendolab/css-var-ts";
+import { createCssVarUtils, slugify } from "@crescendolab/css-var-ts";
 
 const randomCssVarUtils = createCssVarUtils({
-  recordKeyToCssVarKey: () =>
-    `--random-${Math.random().toString(16).slice(2)}` as const,
+  recordKeyToCssVarKey: (key) =>
+    `--random-${slugify(key)}-${Math.random().toString(16).slice(2)}` as const,
 });
 
 const randomVars = randomCssVarUtils.define({
@@ -162,6 +162,26 @@ const randomVars = randomCssVarUtils.define({
 });
 
 randomVars.getKey("primary"); // different each load
+```
+
+#### Static (Deterministic) Keys
+
+If you prefer fully readable, deterministic variable names (no random suffix) you can supply a static strategy. Be sure to manually ensure uniqueness across packages / bundles when using this approach.
+
+```ts
+import { createCssVarUtils, slugify } from "@crescendolab/css-var-ts";
+
+const staticCssVarUtils = createCssVarUtils({
+  recordKeyToCssVarKey: (key) => `--static-${slugify(key)}` as const,
+});
+
+const staticVars = staticCssVarUtils.define({
+  primary: "#0074D9",
+  accent: "#F012BE",
+});
+
+staticVars.getKey("primary"); // "--static-primary"
+staticVars.getValue("primary"); // "var(--static-primary)"
 ```
 
 ### `@property` Registration
@@ -185,21 +205,24 @@ CSS.registerProperty({
 
 For large-scale web applications (mono-repos, micro frontends, dynamic plugin architectures) you should take extra precautions to avoid accidental variable name collisions and to harden your design system surface.
 
-1. Strengthen uniqueness: Provide a custom `recordKeyToCssVarKey` that injects a namespace (package name) plus a stable build hash or random suffix.
+1. Strengthen uniqueness: Provide a custom `recordKeyToCssVarKey` that injects a namespace (package name) plus a short random suffix. (You can optionally add build / commit info if desired.)
 
    ```ts
-   import { createCssVarUtils } from "@crescendolab/css-var-ts";
+   import {
+     createCssVarUtils,
+     randomString,
+     slugify,
+   } from "@crescendolab/css-var-ts";
 
-   const ns = process.env.APP_NAMESPACE ?? "app"; // e.g. marketing, analytics
-   const buildId = process.env.COMMIT_SHA?.slice(0, 7) ?? "dev";
+   const namespace = process.env.APP_NAMESPACE ?? "app"; // e.g. marketing, analytics
 
    const scopedCssVarUtils = createCssVarUtils({
-     recordKeyToCssVarKey: (k) =>
-       `--${ns}-${buildId}-${k}-${Math.random().toString(36).slice(2, 8)}` as const,
+     recordKeyToCssVarKey: (key) =>
+       `--${namespace}-${slugify(key)}-${randomString(8)}` as const,
    });
    ```
 
-   For deterministic builds replace `Math.random()` with a hash of `(ns + buildId + k)`.
+   For deterministic builds replace `randomString(8)` with a stable hash (e.g. of `namespace + key`).
 
 2. Strongly recommended: Register core design tokens via `@property` to enforce syntax (e.g. `<color>`, `<length>`) and enable smoother transitions & validation.
 3. Expose only semantic tokens to feature teams; keep raw palette tokens private to your design system package.
