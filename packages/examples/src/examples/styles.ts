@@ -1,12 +1,8 @@
-import {
-  createCssVarUtils,
-  randomString,
-  slugify,
-} from "@crescendolab/css-var-ts";
+import { cssVarUtils, randomString, slugify } from "@crescendolab/css-var-ts";
 
 import { mapKeys } from "es-toolkit";
 
-const gruvboxCssVarUtils = createCssVarUtils({
+const gruvboxCssVarUtils = cssVarUtils.create({
   recordKeyToCssVarKey: (recordKey) =>
     `--gruvbox-${slugify(recordKey)}-${randomString(8)}` as const,
 });
@@ -98,7 +94,7 @@ const gruvboxDarkCssProps: typeof gruvboxCssVarSemanticDefinition.cssProps =
       warning: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkYellow"),
       primary: gruvboxCssVarBaseDefinition.getValue("gruvboxDarkBlue"),
     } satisfies Record<
-      keyof typeof gruvboxCssVarSemanticDefinition.cssVarRecord,
+      keyof (typeof gruvboxCssVarSemanticDefinition.raw)[0],
       string
     >,
     (_value, key) => gruvboxCssVarSemanticDefinition.getKey(key),

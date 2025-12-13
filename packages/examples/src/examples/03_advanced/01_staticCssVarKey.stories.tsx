@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { createCssVarUtils, slugify } from "@crescendolab/css-var-ts";
+import { cssVarUtils, slugify } from "@crescendolab/css-var-ts";
 
-const cssVarUtils = createCssVarUtils({
+const staticCssVarUtils = cssVarUtils.create({
   recordKeyToCssVarKey: (recordKey) =>
     `--static-${slugify(recordKey)}` as const,
 });
 
-const paletteDefnition = cssVarUtils.define({
+const paletteDefnition = staticCssVarUtils.define({
   navy: "#001F3F",
   blue: "#0074D9",
   aqua: "#7FDBFF",
@@ -27,7 +27,7 @@ const paletteDefnition = cssVarUtils.define({
   black: "#111111",
 });
 
-const sematicCssVarDefinition = cssVarUtils.define({
+const sematicCssVarDefinition = staticCssVarUtils.define({
   primary: paletteDefnition.getValue("navy"),
   secondary: paletteDefnition.getValue("gray"),
   success: paletteDefnition.getValue("green"),
@@ -47,7 +47,7 @@ const colorOptions = [
   "fuchsia",
   "purple",
   "maroon",
-] as const satisfies Array<keyof typeof paletteDefnition.cssVarRecord>;
+] as const satisfies Array<keyof (typeof paletteDefnition.raw)[0]>;
 
 const variantOptions = [
   "foreground",
@@ -56,12 +56,12 @@ const variantOptions = [
   "success",
   "warning",
   "error",
-] as const satisfies Array<keyof typeof sematicCssVarDefinition.cssVarRecord>;
+] as const satisfies Array<keyof (typeof sematicCssVarDefinition.raw)[0]>;
 
 const Demo: React.FC<{
   text: string;
-  color: keyof typeof paletteDefnition.cssVarRecord;
-  variant: keyof typeof sematicCssVarDefinition.cssVarRecord;
+  color: keyof (typeof paletteDefnition.raw)[0];
+  variant: keyof (typeof sematicCssVarDefinition.raw)[0];
 }> = ({ text, color, variant }) => {
   return (
     <div

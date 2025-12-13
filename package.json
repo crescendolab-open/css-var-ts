@@ -57,6 +57,7 @@
     "husky": "catalog:",
     "jiti": "catalog:",
     "lint-staged": "catalog:",
+    "npm-run-all": "catalog:",
     "pathe": "catalog:",
     "playwright": "catalog:",
     "postcss-styled-syntax": "catalog:",
