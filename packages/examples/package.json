@@ -1,6 +1,6 @@
 {
   "name": "@repo/examples",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "private": true,
   "description": "Example projects demonstrating the usage of css-var-ts",
   "type": "module",
