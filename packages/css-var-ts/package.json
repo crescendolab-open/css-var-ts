@@ -33,13 +33,13 @@
     "build": "tsdown",
     "prepublishOnly": "pnpm run build"
   },
-  "devDependencies": {
-    "tsdown": "catalog:"
-  },
-  "optionalDependencies": {
+  "dependencies": {
     "@types/randombytes": "catalog:",
     "randombytes": "catalog:",
     "slugify": "catalog:"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:"
   },
   "publishConfig": {
     "access": "public"

@@ -10,11 +10,10 @@ Type-safe, ergonomic utilities for authoring, registering, and consuming CSS Cus
 
 - ✅ Strongly typed CSS variable keys & values
 - ✅ Auto–generated collision‑resistant variable names (slug + short random id)
-- ✅ Zero dependency (createCssVarUtils)
 - ✅ Convenient `.cssProps` map you can spread into inline styles / style objects
 - ✅ Easy integration with: `@emotion/css`, `@emotion/react` (css prop), `@mui/system` (`sx` prop)
 - ✅ Compose semantic variables from a base palette safely (`getValue` → `var(--token)`)
-- ✅ Advanced: custom variable key generator via `createCssVarUtils`
+- ✅ Advanced: custom variable key generator via `cssVarUtils.create`
 - ✅ Advanced: works with `@property` at‑rule registration
 
 ---
@@ -148,13 +147,9 @@ const button = css({
 Use `createCssVarUtils` to fully control how variable names are produced (e.g. ephemeral / randomized keys).
 
 ```ts
-import {
-  createCssVarUtils,
-  randomString,
-  slugify,
-} from "@crescendolab/css-var-ts";
+import { cssVarUtils, randomString, slugify } from "@crescendolab/css-var-ts";
 
-const myCssVarUtils = createCssVarUtils({
+const myCssVarUtils = cssVarUtils.create({
   recordKeyToCssVarKey: (key) =>
     `--my-${slugify(key)}-${randomString(8)}` as const,
 });
@@ -171,9 +166,9 @@ myDefinition.getKey("primary"); // different each load
 If you prefer fully readable, deterministic variable names (no random suffix) you can supply a static strategy. Be sure to manually ensure uniqueness across packages / bundles when using this approach.
 
 ```ts
-import { createCssVarUtils, slugify } from "@crescendolab/css-var-ts";
+import { cssVarUtils, slugify } from "@crescendolab/css-var-ts";
 
-const staticCssVarUtils = createCssVarUtils({
+const staticCssVarUtils = cssVarUtils.create({
   recordKeyToCssVarKey: (key) => `--static-${slugify(key)}` as const,
 });
 
@@ -183,7 +178,7 @@ const staticDefinition = staticCssVarUtils.define({
 });
 
 staticDefinition.getKey("primary"); // "--static-primary"
-staticDefinition.getValue("primary"); // "var(--static-primary)"
+staticDefinition.getValue("primary"); // "var(--static-primary, #0074D9)"
 ```
 
 ### `@property` Registration
@@ -211,14 +206,14 @@ For large-scale web applications (mono-repos, micro frontends, dynamic plugin ar
 
    ```ts
    import {
-     createCssVarUtils,
+     cssVarUtils,
      randomString,
      slugify,
    } from "@crescendolab/css-var-ts";
 
    const namespace = process.env.APP_NAMESPACE ?? "app"; // e.g. marketing, analytics
 
-   const scopedCssVarUtils = createCssVarUtils({
+   const scopedCssVarUtils = cssVarUtils.create({
      recordKeyToCssVarKey: (key) =>
        `--${namespace}-${slugify(key)}-${randomString(8)}` as const,
    });
@@ -243,28 +238,28 @@ The default exported utility bundle.
 
 ```ts
 const definition = cssVarUtils.define({ accent: "#F012BE" });
-definition.cssVarRecord; // { accent: "#F012BE" }
+definition.raw; // [{ accent: "#F012BE" }]
 // example suffix will differ each run (8 random hex chars):
 definition.cssProps; // { "--accent-a1b2c3d4": "#F012BE" }
 definition.getKey("accent"); // "--accent-a1b2c3d4"
-definition.getValue("accent"); // "var(--accent-a1b2c3d4)"
+definition.getValue("accent"); // "var(--accent-a1b2c3d4, #F012BE)"
 ```
 
 Each call to `define()` returns an object:
 
 | Key              | Type                      | Description                                                   |
 | ---------------- | ------------------------- | ------------------------------------------------------------- |
-| `cssVarRecord`   | original readonly record  | Raw tokens you passed in                                      |
+| `raw`            | `[base, ...exts]`         | Array of raw token records (base + extensions)                |
 | `cssProps`       | Record<cssVarKey, string> | Object you can spread into style systems to declare variables |
 | `getKey(name)`   | string                    | Generated CSS variable name (e.g. `--accent-…`)               |
-| `getValue(name)` | `var(--token)`            | Proper `var()` usage string                                   |
+| `getValue(name)` | `var(--token, val)`       | Proper `var()` usage string                                   |
 
-### `createCssVarUtils(options)`
+### `cssVarUtils.create(options)`
 
 Low‑level factory to customize naming.
 
 ```ts
-const custom = createCssVarUtils({
+const custom = cssVarUtils.create({
   recordKeyToCssVarKey: (k) => `--my-${k}` as const,
 });
 ```
@@ -301,7 +296,7 @@ List of approaches:
 
 - Default (`cssVarUtils`): Slug + random 8‑char id = collision‑resistant and readable.
 - Static custom (see story): `--static-${slug}` for fully readable tokens; ensure uniqueness manually.
-- Random / ephemeral: `createCssVarUtils` + `randomString` / build hash for experiments, multi‑tenant isolation, A/B variants.
+- Random / ephemeral: `cssVarUtils.create` + `randomString` / build hash for experiments, multi‑tenant isolation, A/B variants.
 
 ---
 
