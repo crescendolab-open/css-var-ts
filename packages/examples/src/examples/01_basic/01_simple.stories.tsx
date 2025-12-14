@@ -15,7 +15,7 @@ const Demo: React.FC<{
   return (
     <div
       style={{
-        ...palette.cssProps,
+        // ...palette.cssProps, // Optional: variables have fallback values via getValue()
         ...(theme !== "dark"
           ? {}
           : {

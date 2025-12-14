@@ -36,7 +36,7 @@ yarn add @crescendolab/css-var-ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
 // 1. Define a base palette
-const paletteDefinition = cssVarUtils.define({
+const palette = cssVarUtils.define({
   primaryBlue: "#0074D9",
   accentPink: "#F012BE",
   neutralBg: "#FFFFFF",
@@ -44,18 +44,18 @@ const paletteDefinition = cssVarUtils.define({
 });
 
 // 2. Define semantic tokens referencing the palette (type‑safe)
-const semanticDefinition = cssVarUtils.define({
-  brand: paletteDefinition.getValue("primaryBlue"),
-  text: paletteDefinition.getValue("neutralFg"),
-  background: paletteDefinition.getValue("neutralBg"),
+const semantic = cssVarUtils.define({
+  brand: palette.getValue("primaryBlue"),
+  text: palette.getValue("neutralFg"),
+  background: palette.getValue("neutralBg"),
 });
 
 // 3. Use in styles
 const style: React.CSSProperties = {
-  ...paletteDefinition.cssProps,
-  ...semanticDefinition.cssProps,
-  color: semanticDefinition.getValue("text"),
-  backgroundColor: semanticDefinition.getValue("background"),
+  // ...palette.cssProps, // Optional: variables have fallback values via `getValue`
+  // ...semantic.cssProps,
+  color: semantic.getValue("text"),
+  backgroundColor: semantic.getValue("background"),
 };
 ```
 
@@ -277,7 +277,9 @@ const custom = cssVarUtils.create({
 
 | Category           | Story              | Code                                                                                                                                                                                              | Live Demo                                                                                                                    |
 | ------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Basic              | Palette + semantic | [`01_basic`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/index.stories.tsx)                                                                 | [Playground](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic--playground)                      |
+| Basic: Simple      | Palette only       | [`01_basic/01_simple`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/01_simple.stories.tsx)                                                   | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic-01-simple--default)                     |
+| Basic: Extend      | `.extend()` usage  | [`01_basic/02_extend`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/02_extend.stories.tsx)                                                   | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic-02-extend--default)                     |
+| Basic: Reset       | Nested reset       | [`01_basic/03_reset`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/03_reset.stories.tsx)                                                     | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic-03-reset--default)                      |
 | Emotion (class)    | `@emotion/css`     | [`02_integration/01_emotion/01_emotion_css`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/02_integration/01_emotion/01_emotion_css/index.stories.tsx) | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-02-integration-01-emotion-01-emotion-css--story) |
 | Emotion (css prop) | `@emotion/react`   | [`02_integration/01_emotion/02_css_prop`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/02_integration/01_emotion/02_css_prop/index.stories.tsx)       | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-02-integration-01-emotion-02-css-prop--story)    |
 | MUI                | `sx` prop          | [`02_integration/02_mui_sx_prop`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/02_integration/02_mui_sx_prop/index.stories.tsx)                       | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-02-integration-02-mui-sx-prop--story)            |
