@@ -36,7 +36,7 @@ yarn add @crescendolab/css-var-ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
 // 1. Define a base palette
-const paletteDefinition = cssVarUtils.define({
+const palette = cssVarUtils.define({
   primaryBlue: "#0074D9",
   accentPink: "#F012BE",
   neutralBg: "#FFFFFF",
@@ -44,18 +44,18 @@ const paletteDefinition = cssVarUtils.define({
 });
 
 // 2. Define semantic tokens referencing the palette (type‑safe)
-const semanticDefinition = cssVarUtils.define({
-  brand: paletteDefinition.getValue("primaryBlue"),
-  text: paletteDefinition.getValue("neutralFg"),
-  background: paletteDefinition.getValue("neutralBg"),
+const semantic = cssVarUtils.define({
+  brand: palette.getValue("primaryBlue"),
+  text: palette.getValue("neutralFg"),
+  background: palette.getValue("neutralBg"),
 });
 
 // 3. Use in styles
 const style: React.CSSProperties = {
-  ...paletteDefinition.cssProps,
-  ...semanticDefinition.cssProps,
-  color: semanticDefinition.getValue("text"),
-  backgroundColor: semanticDefinition.getValue("background"),
+  // ...palette.cssProps, // Optional: variables have fallback values via `getValue`
+  // ...semantic.cssProps,
+  color: semantic.getValue("text"),
+  backgroundColor: semantic.getValue("background"),
 };
 ```
 
