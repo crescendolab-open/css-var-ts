@@ -1,6 +1,6 @@
 {
   "name": "@crescendolab/css-var-ts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type-safe utilities for CSS Custom Properties",
   "keywords": [
     "css",
