@@ -1,5 +1,12 @@
 # @crescendolab/css-var-ts
 
+## 1.0.1
+
+### Patch Changes
+
+- cc9ac8e: docs: fix broken storybook links and add nested reset example
+- cc9ac8e: docs: update examples to show cssProps as optional given getValue fallback
+
 ## 1.0.0
 
 ### Major Changes

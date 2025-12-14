@@ -1,5 +1,13 @@
 # @repo/examples
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [cc9ac8e]
+- Updated dependencies [cc9ac8e]
+  - @crescendolab/css-var-ts@1.0.1
+
 ## 1.0.0
 
 ### Patch Changes
