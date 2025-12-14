@@ -66,31 +66,40 @@ Resulting (example) generated variable keys (random 8‑char suffix) look like:
 --accentpink-9fe012ab
 ```
 
-## 🧩 Basic Usage (from Storybook “01_basic”)
+## 🧩 Basic Usage (from Storybook “01_basic/02_extend”)
 
 ```ts
 import { cssVarUtils } from "@crescendolab/css-var-ts";
 
-// Base palette
-const paletteDefinition = cssVarUtils.define({
+// 1. Base Palette
+const basePalette = cssVarUtils.define({
   navy: "#001F3F",
   blue: "#0074D9",
   aqua: "#7FDBFF",
   black: "#111111",
+  white: "#FFFFFF",
 });
 
-// Semantic tokens referencing base palette
-const semanticDefinition = cssVarUtils.define({
-  primary: paletteDefinition.getValue("navy"),
-  foreground: paletteDefinition.getValue("black"),
+// 2. Semantic Tokens (Extending / Aliasing)
+// .extend() allows you to reference keys from the base definition!
+const semanticTokens = basePalette.extend({
+  primary: "blue", // references basePalette's "blue"
+  foreground: "black",
+  background: "white",
 });
 
-// Override one semantic var dynamically
-const dynamicStyle = {
-  ...paletteDefinition.cssProps,
-  ...semanticDefinition.cssProps,
-  [semanticDefinition.getKey("primary")]: paletteDefinition.getValue("blue"),
-  color: semanticDefinition.getValue("foreground"),
+// 3. Usage
+const style = {
+  // Spread both to ensure all variables are declared
+  ...basePalette.cssProps,
+  ...semanticTokens.cssProps,
+
+  // Use semantic tokens
+  color: semanticTokens.getValue("foreground"),
+  backgroundColor: semanticTokens.getValue("background"),
+
+  // Use base palette if needed
+  border: `1px solid ${basePalette.getValue("navy")}`,
 };
 ```
 
@@ -144,7 +153,7 @@ const button = css({
 
 ### Custom Variable Key Strategy
 
-Use `createCssVarUtils` to fully control how variable names are produced (e.g. ephemeral / randomized keys).
+Use `cssVarUtils.create` to fully control how variable names are produced (e.g. ephemeral / randomized keys).
 
 ```ts
 import { cssVarUtils, randomString, slugify } from "@crescendolab/css-var-ts";
@@ -245,7 +254,7 @@ definition.getKey("accent"); // "--accent-a1b2c3d4"
 definition.getValue("accent"); // "var(--accent-a1b2c3d4, #F012BE)"
 ```
 
-Each call to `define()` returns an object:
+Each call to `define()` (or `.extend()`) returns an object:
 
 | Key              | Type                      | Description                                                   |
 | ---------------- | ------------------------- | ------------------------------------------------------------- |
@@ -253,6 +262,7 @@ Each call to `define()` returns an object:
 | `cssProps`       | Record<cssVarKey, string> | Object you can spread into style systems to declare variables |
 | `getKey(name)`   | string                    | Generated CSS variable name (e.g. `--accent-…`)               |
 | `getValue(name)` | `var(--token, val)`       | Proper `var()` usage string                                   |
+| `extend(map)`    | New Definition            | Create a new definition extending the current one             |
 
 ### `cssVarUtils.create(options)`
 
@@ -277,7 +287,8 @@ const custom = cssVarUtils.create({
 
 | Category           | Story              | Code                                                                                                                                                                                              | Live Demo                                                                                                                    |
 | ------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Basic              | Palette + semantic | [`01_basic`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/index.stories.tsx)                                                                 | [Playground](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic--playground)                      |
+| Basic: Simple      | Palette only       | [`01_basic/01_simple`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/01_simple.stories.tsx)                                                   | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic-01-simple--default)                     |
+| Basic: Extend      | `.extend()` usage  | [`01_basic/02_extend`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/01_basic/02_extend.stories.tsx)                                                   | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-01-basic-02-extend--default)                     |
 | Emotion (class)    | `@emotion/css`     | [`02_integration/01_emotion/01_emotion_css`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/02_integration/01_emotion/01_emotion_css/index.stories.tsx) | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-02-integration-01-emotion-01-emotion-css--story) |
 | Emotion (css prop) | `@emotion/react`   | [`02_integration/01_emotion/02_css_prop`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/02_integration/01_emotion/02_css_prop/index.stories.tsx)       | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-02-integration-01-emotion-02-css-prop--story)    |
 | MUI                | `sx` prop          | [`02_integration/02_mui_sx_prop`](https://github.com/crescendolab-open/css-var-ts/tree/main/packages/examples/src/examples/02_integration/02_mui_sx_prop/index.stories.tsx)                       | [Demo](https://crescendolab-open.github.io/css-var-ts/?path=/story/examples-02-integration-02-mui-sx-prop--story)            |
