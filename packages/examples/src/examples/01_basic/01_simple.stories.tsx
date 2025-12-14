@@ -55,3 +55,33 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const WithoutCssProps: Story = {
+  render: (args) => {
+    // This component does NOT inject palette.cssProps into the style.
+    // It relies entirely on the fallback values provided by getValue().
+    return (
+      <div
+        style={{
+          // Note: No ...palette.cssProps here!
+          fontFamily: "system-ui, sans-serif",
+          padding: "2rem",
+
+          // These work because getValue("key") returns "var(--key, fallback)"
+          backgroundColor: palette.getValue("background"),
+          color: palette.getValue("text"),
+          border: `2px dashed ${palette.getValue("secondary")}`,
+        }}
+      >
+        <h1 style={{ color: palette.getValue("primary") }}>
+          {args.text} (No CSS Props)
+        </h1>
+        <p style={{ color: palette.getValue("secondary") }}>
+          This example demonstrates that <code>cssProps</code> injection is
+          optional. Vars fall back to their default values if not present in the
+          DOM.
+        </p>
+      </div>
+    );
+  },
+};

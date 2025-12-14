@@ -52,10 +52,13 @@ const semanticDefinition = cssVarUtils.define({
 
 // 3. Use in styles
 const style: React.CSSProperties = {
-  ...paletteDefinition.cssProps,
-  ...semanticDefinition.cssProps,
-  color: semanticDefinition.getValue("text"),
-  backgroundColor: semanticDefinition.getValue("background"),
+  // Optional: Spread cssProps to register variables locally (or use global registration)
+  // ...paletteDefinition.cssProps,
+  // ...semanticDefinition.cssProps,
+
+  // Usage is resilient because getValue() includes the fallback!
+  color: semanticDefinition.getValue("text"), // var(--text-..., #111111)
+  backgroundColor: semanticDefinition.getValue("background"), // var(--bg-..., #FFFFFF)
 };
 ```
 
@@ -90,11 +93,11 @@ const semanticTokens = basePalette.extend({
 
 // 3. Usage
 const style = {
-  // Spread both to ensure all variables are declared
-  ...basePalette.cssProps,
-  ...semanticTokens.cssProps,
+  // Optional: Register variables here if not done globally
+  // ...basePalette.cssProps,
+  // ...semanticTokens.cssProps,
 
-  // Use semantic tokens
+  // Use semantic tokens (with fallbacks included)
   color: semanticTokens.getValue("foreground"),
   backgroundColor: semanticTokens.getValue("background"),
 

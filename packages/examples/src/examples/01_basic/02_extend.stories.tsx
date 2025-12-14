@@ -24,7 +24,8 @@ const Demo: React.FC = () => {
   return (
     <div
       style={{
-        // Spread both to ensure all variables (base + extended) are available
+        // Optional: Spread cssProps to ensure variables are registered.
+        // If omitted, variables will simply fall back to their defined values.
         ...semanticTokens.cssProps,
         fontFamily: "system-ui, sans-serif",
         padding: "2rem",
