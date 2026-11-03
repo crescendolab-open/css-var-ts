@@ -1,3 +1,6 @@
+import { readFile } from "node:fs/promises";
+import vm from "node:vm";
+import ts from "typescript";
 import { describe, expect, it } from "vitest";
 import { randomString } from "./randomString";
 
@@ -39,5 +42,33 @@ describe("randomString", () => {
     const a = randomString(10);
     const b = randomString(11);
     expect(a.length).not.toBe(b.length);
+  });
+
+  it("loads and runs with only Web Crypto (no Buffer, no Node modules)", async () => {
+    const source = await readFile(
+      new URL("./randomString.ts", import.meta.url),
+      "utf8",
+    );
+    const { outputText } = ts.transpileModule(source, {
+      compilerOptions: {
+        module: ts.ModuleKind.CommonJS,
+        target: ts.ScriptTarget.ES2022,
+      },
+    });
+    const module = { exports: {} as { randomString?: typeof randomString } };
+    const context = vm.createContext({
+      crypto: globalThis.crypto,
+      exports: module.exports,
+      module,
+      require: (id: string) => {
+        throw new Error(`Unexpected import: ${id}`);
+      },
+    });
+    vm.runInContext(outputText, context);
+
+    expect(vm.runInContext("typeof Buffer", context)).toBe("undefined");
+    const s = module.exports.randomString?.(8);
+    expect(s).toHaveLength(8);
+    expect(HEX_RE.test(s ?? "")).toBe(true);
   });
 });

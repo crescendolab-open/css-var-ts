@@ -63,9 +63,6 @@ catalogs:
     '@types/node':
       specifier: ^24.6.0
       version: 24.7.0
-    '@types/randombytes':
-      specifier: ^2.0.3
-      version: 2.0.3
     '@types/react':
       specifier: ^19.1.16
       version: 19.2.2
@@ -150,9 +147,6 @@ catalogs:
     prettier:
       specifier: ^3.6.2
       version: 3.6.2
-    randombytes:
-      specifier: ^2.1.0
-      version: 2.1.0
     react:
       specifier: ^19.1.1
       version: 19.2.0
@@ -344,12 +338,6 @@ importers:
 
   packages/css-var-ts:
     dependencies:
-      '@types/randombytes':
-        specifier: 'catalog:'
-        version: 2.0.3
-      randombytes:
-        specifier: 'catalog:'
-        version: 2.1.0
       slugify:
         specifier: 'catalog:'
         version: 1.6.6
@@ -1836,9 +1824,6 @@ packages:
 
   '@types/prop-types@15.7.15':
     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
-
-  '@types/randombytes@2.0.3':
-    resolution: {integrity: sha512-+NRgihTfuURllWCiIAhm1wsJqzsocnqXM77V/CalsdJIYSRGEHMnritxh+6EsBklshC+clo1KgnN14qgSGeQdw==}
 
   '@types/react-dom@19.2.1':
     resolution: {integrity: sha512-/EEvYBdT3BflCWvTMO7YkYBHVE9Ci6XdqZciZANQgKpaiDRGOLIlRo91jbTNRQjgPFWVaRxcYc0luVNFitz57A==}
@@ -4469,9 +4454,6 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  randombytes@2.1.0:
-    resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
-
   react-docgen-typescript@2.4.0:
     resolution: {integrity: sha512-ZtAp5XTO5HRzQctjPU0ybY0RRCQO19X/8fxn3w7y2VVTUbGHDKULPTL4ky3vB05euSgG5NpALhEhDPvQ56wvXg==}
     peerDependencies:
@@ -6979,10 +6961,6 @@ snapshots:
   '@types/parse-json@4.0.2': {}
 
   '@types/prop-types@15.7.15': {}
-
-  '@types/randombytes@2.0.3':
-    dependencies:
-      '@types/node': 24.7.0
 
   '@types/react-dom@19.2.1(@types/react@19.2.2)':
     dependencies:
@@ -10024,10 +10002,6 @@ snapshots:
   quansync@0.2.11: {}
 
   queue-microtask@1.2.3: {}
-
-  randombytes@2.1.0:
-    dependencies:
-      safe-buffer: 5.2.1
 
   react-docgen-typescript@2.4.0(typescript@5.9.3):
     dependencies:
