@@ -34,8 +34,6 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "@types/randombytes": "catalog:",
-    "randombytes": "catalog:",
     "slugify": "catalog:"
   },
   "devDependencies": {

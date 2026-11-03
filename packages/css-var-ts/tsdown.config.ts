@@ -7,7 +7,7 @@ const basicConfig = {
   entry: ["src/index.ts"],
   tsconfig: "tsconfig.lib.json",
   dts: true,
-  external: ["randombytes", "slugify"],
+  external: ["slugify"],
 } as const satisfies Exclude<UserConfig, Array<any>>;
 
 const filesCopyFromRootToPkg = ["README.md", "LICENSE"];
